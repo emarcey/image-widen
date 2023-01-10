@@ -2,8 +2,11 @@ import argparse
 from datetime import datetime
 import os
 from PIL import Image
+from pillow_heif import register_heif_opener
 import requests
 from typing import Optional, Tuple
+
+register_heif_opener()
 
 
 SOURCE_DIR = f"{os.getcwd()}/originals"
@@ -24,8 +27,6 @@ def transform_and_save(original: Image.Image, output_dir: str, filename: str, fi
 
 def from_image(original_file: str, source_dir: str) -> Tuple[Image.Image, str, str]:
     original = Image.open(f"{source_dir.rstrip('/')}/{original_file}")
-    if original.height != original.width:
-        raise ValueError("Program only handles square files")
     full_filename = original_file.split("/")[-1].split(".")
     filename = full_filename[0]
     extension = ".".join(full_filename[1:])
